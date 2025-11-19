@@ -1,0 +1,187 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Navbar links */
+        .nav-link {
+            color: #e8f7f8 !important; /* soft modern teal-white for inactive */
+            font-weight: 500;
+            transition: 0.25s;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Active link */
+        .nav-link.active {
+            font-weight: bold;
+            color: #ffffff !important;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: #00b3b8; /* same as About Us */
+            height: 70px;
+        }
+
+        .navbar h2 {
+            color: white;
+        }
+
+        body {
+            background-color: #f4f7f9; /* light neutral background, matches About Us */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Page content padding */
+        .content-container {
+            padding: 60px 80px;
+        }
+
+        /* Title & Subtitle */
+        .contact-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .contact-header h1 {
+            color: #00b3b8; /* main accent color, matches About Us title */
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .contact-header p {
+            font-size: 1.3em;
+            color: #555555;
+            line-height: 1.8;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Cards layout */
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .contact-card {
+            width: 300px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.18);
+        }
+
+        .contact-card h3 {
+            color: #00b3b8; /* matches main theme color */
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 0.95em;
+            color: #555555;
+        }
+
+        .contact-item i {
+            color: #00b3b8;
+            font-size: 1.2em;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px){
+            .contact-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            .contact-card {
+                width: 85%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <h2 style="padding-right: 5%;">Dealerships</h2>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+              aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" style="font-size: larger;" href="/contact">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content-container">
+    <!-- Title & Subtitle -->
+    <div class="contact-header">
+        <h1>Contact Us</h1>
+        <p>Have a question or want to buy your dream car? Our team at Best Cars is always ready to assist.
+        Reach out today and let’s make your car buying experience smooth, enjoyable, and memorable!</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="contact-row">
+        <!-- Head Office -->
+        <div class="contact-card">
+            <h3>Head Office</h3>
+            <div class="contact-item"><i class="fa-solid fa-house"></i> 123 Main Street, Springfield, USA</div>
+            <div class="contact-item"><i class="fa-solid fa-phone"></i> +1 (555) 123-4567</div>
+            <div class="contact-item"><i class="fa-solid fa-envelope"></i> info@bestcars.com</div>
+        </div>
+
+        <!-- Customer Support -->
+        <div class="contact-card">
+            <h3>Customer Support</h3>
+            <div class="contact-item"><i class="fa-solid fa-phone"></i> +1 (555) 765-4321</div>
+            <div class="contact-item"><i class="fa-solid fa-envelope"></i> support@bestcars.com</div>
+            <div class="contact-item"><i class="fa-brands fa-linkedin"></i> linkedin.com/company/bestcars</div>
+        </div>
+
+        <!-- Business Inquiries -->
+        <div class="contact-card">
+            <h3>Business Inquiries</h3>
+            <div class="contact-item"><i class="fa-solid fa-envelope"></i> sales@bestcars.com</div>
+            <div class="contact-item"><i class="fa-brands fa-linkedin"></i> linkedin.com/company/bestcars</div>
+            <div class="contact-item"><i class="fa-solid fa-phone"></i> +1 (555) 987-6543</div>
+        </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

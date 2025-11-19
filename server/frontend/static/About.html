@@ -1,68 +1,246 @@
 <html>
 <head>
-  <!-- Link the style sheet here -->
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+        /* Navbar links */
+        .nav-link {
+            color: #e8f7f8 !important; /* soft modern teal-white */
+            font-weight: 500;
+            transition: .25s;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Active link */
+        .nav-link.active {
+            font-weight: bold;
+            color: #ffffff !important;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: #00b3b8;
+            height: 70px;
+        }
+        .navbar h2 {
+            color: white;
+        }
+
+        body {
+            background-color: #f4f7f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Page padding */
+        .content-container {
+            padding: 60px 80px;
+        }
+
+        /* Title section */
+        .about-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .about-header h1 {
+            color: #00b3b8;
+            font-size: 3em;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .about-header p {
+            font-size: 1.3em;
+            color: #555;
+            line-height: 1.8;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Cards layout */
+        .people-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .people-card {
+            width: 350px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .people-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.18);
+        }
+
+        .people-card img {
+            height: 350px;
+            width: 100%;
+            object-fit: cover;
+            object-position: top; /* ensures head stays visible */
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            padding: 25px 20px;
+        }
+
+        .people-card .name {
+            background-color: #00b3b8;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 1.25em;
+        }
+
+        .people-card .position {
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+
+        .people-card p {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .contact-icons a {
+            color: #00b3b8;
+            font-size: 1.4em;
+            transition: 0.25s;
+        }
+
+        .contact-icons a:hover {
+            color: #005f5f;
+        }
+
+        @media(max-width: 768px){
+            .people-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            .people-card {
+                width: 85%;
+            }
+        }
+    </style>
 </head>
+
+<body>
 <div>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <h2 style="padding-right: 5%;">Dealerships</h2>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+              aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
           <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
+            <a class="nav-link" style="font-size: larger;" href="/">Home</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link active" style="font-size: larger;" href="/about">About Us</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
           </li>
+
         </ul>
       </div>
     </div>
   </nav>
-  
-    <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-      <!-- Insert header information here -->
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person1</p>
-          <p>Person1 Title</p>
-          <p class="card-text">Some text that explains the person1 in about 2 short sentences</p>
-          <p>person1@example.com</p>
-        </div>
-      </div>
 
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person2</p>
-          <p>Person2 Title</p>
-          <p class="card-text">Some text that explains the person2 in about 2 short sentences</p>
-          <p>person2@example.com</p>
-        </div>
-      </div>
+  <!-- Content -->
+  <div class="content-container">
 
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person3</p>
-          <p>Person3 Title</p>
-          <p class="card-text">Some text that explains the person3 in about 2 short sentences</p>
-          <p>person3@example.com</p>
+    <div class="about-header">
+        <h1>Meet Our Team</h1>
+        <p>Our dedicated team at Best Cars Dealership ensures your car buying experience is seamless,
+        enjoyable, and tailored to your needs.</p>
+    </div>
+
+    <!-- People Cards -->
+    <div class="people-row">
+
+        <div class="people-card">
+            <img src="/static/person1.png" alt="Caleb Lee">
+            <div class="card-body">
+                <div class="name">Caleb Lee</div>
+                <div class="position">Customer Experience Manager</div>
+                <p>Caleb ensures every client enjoys a smooth buying experience and excellent support.</p>
+                <div class="contact-icons">
+                    <a href="mailto:caleb.lee@bestcars.com"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-solid fa-phone"></i></a>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div class="people-card">
+            <img src="/static/person2.jpg" alt="Alex Smith">
+            <div class="card-body">
+                <div class="name">Alex Smith</div>
+                <div class="position">Chief Executive Officer</div>
+                <p>Alex leads Best Cars with experience and passion for customer satisfaction.</p>
+                <div class="contact-icons">
+                    <a href="mailto:alex.smith@bestcars.com"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-solid fa-phone"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="people-card">
+            <img src="/static/person3.jpg" alt="Bob Johnson">
+            <div class="card-body">
+                <div class="name">Bob Johnson</div>
+                <div class="position">Head of Sales</div>
+                <p>Bob manages our sales team and helps clients find the perfect car.</p>
+                <div class="contact-icons">
+                    <a href="mailto:bob.johnson@bestcars.com"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-solid fa-phone"></i></a>
+                </div>
+            </div>
+        </div>
+
     </div>
-    </div>
-    </div>
-    
+  </div>
+
 </div>
-
+</body>
 </html>
