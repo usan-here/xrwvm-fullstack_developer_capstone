@@ -19,11 +19,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'https://ummesanjedaw-8000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+    'https://ummesanjedaw-8000.theiadockernext-1-labs-prod-'
+    'theiak8s-4-tor01.proxy.cognitiveclass.ai',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://ummesanjedaw-8000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+    'https://ummesanjedaw-8000.theiadockernext-1-labs-prod-'
+    'theiak8s-4-tor01.proxy.cognitiveclass.ai',
 ]
 
 REST_FRAMEWORK = {
@@ -85,7 +87,8 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': (
-            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
         ),
     },
     {
@@ -115,7 +118,6 @@ USE_TZ = True
 # Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 MEDIA_URL = '/media/'
 

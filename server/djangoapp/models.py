@@ -39,8 +39,5 @@ class Review(models.Model):
     car_year = models.IntegerField()
     sentiment = models.CharField(max_length=10)
 
-
     def __str__(self):
         return f"{self.name} - {self.dealer_id}"
-    
-    
