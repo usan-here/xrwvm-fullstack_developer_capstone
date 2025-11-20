@@ -46,7 +46,9 @@ def registration(request):
 
     try:
         User.objects.get(username=username)
-        return JsonResponse({"userName": username, "error": "Already Registered"})
+        return JsonResponse(
+            {"userName": username, "error": "Already Registered"}
+        )
     except User.DoesNotExist:
         logger.debug(f"{username} is a new user")
 
@@ -114,7 +116,9 @@ def get_dealer_reviews(request, dealer_id):
             result = analyze_review_sentiments(r.get("review", ""))
             sentiment = result.get("sentiment", "neutral")
         except Exception as e:
-            logger.error(f"Sentiment analysis failed: {e}")
+            logger.error(
+                f"Sentiment analysis failed: {e}"
+            )
 
         r["sentiment"] = sentiment
         processed.append(r)
@@ -131,7 +135,9 @@ def add_review(request):
         response = post_review(data)
 
         if response is None:
-            return JsonResponse({"status": 500, "message": "No response from backend"})
+            return JsonResponse(
+                {"status": 500, "message": "No response from backend"}
+            )
 
         return JsonResponse({"status": 200, "review": response})
 
