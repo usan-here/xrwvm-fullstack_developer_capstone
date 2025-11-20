@@ -32,7 +32,7 @@ This project is a full-stack web application for managing car dealerships and cu
 
 1. **Clone the repository**
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/usan-here/xrwvm-fullstack_developer_capstone.git
 cd xrwvm-fullstack_developer_capstone/server
 ```
 2. Backend setup
