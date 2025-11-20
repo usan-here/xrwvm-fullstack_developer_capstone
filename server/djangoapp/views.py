@@ -1,141 +1,106 @@
-# Uncomment the required imports before adding the code
-
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import logout
-from django.contrib import messages
-from datetime import datetime
-
-from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
-import logging
 import json
+import logging
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .populate import initiate
+
 from .models import CarMake, CarModel
+from .populate import initiate
 from .restapis import get_request, analyze_review_sentiments, post_review
 
-# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
-# Create your views here.
-
-# Create a `login_request` view to handle sign in request
 @csrf_exempt
 def login_user(request):
-    # Get username and password from request.POST dictionary
     data = json.loads(request.body)
     username = data['userName']
     password = data['password']
-    # Try to check if provide credential can be authenticated
-    user = authenticate(username=username, password=password)
-    data = {"userName": username}
-    if user is not None:
-        # If user is valid, call login method to login current user
-        login(request, user)
-        data = {"userName": username, "status": "Authenticated"}
-    return JsonResponse(data)
 
-# Create a `logout_request` view to handle sign out request
-# def logout_request(request):
+    user = authenticate(username=username, password=password)
+    response = {"userName": username}
+
+    if user is not None:
+        login(request, user)
+        response["status"] = "Authenticated"
+
+    return JsonResponse(response)
+
+
 @csrf_exempt
 def logout_request(request):
-    logout(request)  # Terminate user session
-    data = {"userName": ""}  # Return empty username
-    return JsonResponse(data)
+    logout(request)
+    return JsonResponse({"userName": ""})
 
 
-# Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
-    context = {}
-    # Load JSON data from the request body
     data = json.loads(request.body)
+
     username = data['userName']
     password = data['password']
     first_name = data['firstName']
     last_name = data['lastName']
     email = data['email']
-    
-    username_exist = False
-    email_exist = False
-    
+
     try:
-        # Check if user already exists
         User.objects.get(username=username)
-        username_exist = True
-    except:
-        # If not, simply log this is a new user
-        logger.debug("{} is new user".format(username))
-    
-    # If it is a new user
-    if not username_exist:
-        # Create user in auth_user table
-        user = User.objects.create_user(
-            username=username, 
-            first_name=first_name, 
-            last_name=last_name,
-            password=password, 
-            email=email
-        )
-        # Login the user and return JSON
-        login(request, user)
-        data = {"userName": username, "status": "Authenticated"}
-        return JsonResponse(data)
-    else:
-        data = {"userName": username, "error": "Already Registered"}
-        return JsonResponse(data)
+        return JsonResponse({"userName": username, "error": "Already Registered"})
+    except User.DoesNotExist:
+        logger.debug(f"{username} is a new user")
+
+    user = User.objects.create_user(
+        username=username,
+        first_name=first_name,
+        last_name=last_name,
+        password=password,
+        email=email
+    )
+
+    login(request, user)
+    return JsonResponse({"userName": username, "status": "Authenticated"})
 
 
 def get_cars(request):
-    # Populate only if empty
     if CarMake.objects.count() == 0:
         initiate()
 
-    car_models = CarModel.objects.select_related('car_make')
-    
-    cars = []
-    for cm in car_models:
-        cars.append({
+    car_models = CarModel.objects.select_related("car_make")
+    cars = [
+        {
             "CarMake": cm.car_make.name,
             "CarModel": cm.name,
             "Type": cm.type,
             "DealerId": cm.dealer_id,
             "Year": cm.year,
-        })
-    
+        }
+        for cm in car_models
+    ]
+
     return JsonResponse({"CarModels": cars})
 
 
-
-# Update the `get_dealerships` view
 def get_dealerships(request, state="All"):
-    if state == "All":
-        endpoint = "/fetchDealers"
-    else:
-        endpoint = "/fetchDealers/" + state
-    dealerships = get_request(endpoint)
-    return JsonResponse({"status": 200, "dealers": dealerships})
+    endpoint = "/fetchDealers" if state == "All" else f"/fetchDealers/{state}"
+    dealers = get_request(endpoint)
+    return JsonResponse({"status": 200, "dealers": dealers})
 
-# Create `get_dealer_details` view
+
 def get_dealer_details(request, dealer_id):
     if not dealer_id:
         return JsonResponse({"status": 400, "message": "Bad Request"})
-    
+
     endpoint = f"/fetchDealer/{dealer_id}"
     dealer_data = get_request(endpoint) or []
-    
-    # Make sure dealer_data is a list
+
     if not isinstance(dealer_data, list):
-        dealer_data = [dealer_data] if dealer_data else []
-    
+        dealer_data = [dealer_data]
+
     return JsonResponse({"status": 200, "dealer": dealer_data})
 
 
-# Create `get_dealer_reviews` view
 def get_dealer_reviews(request, dealer_id):
     if not dealer_id:
         return JsonResponse({"status": 400, "message": "Bad Request"})
@@ -143,30 +108,34 @@ def get_dealer_reviews(request, dealer_id):
     endpoint = f"/fetchReviews/dealer/{dealer_id}"
     reviews = get_request(endpoint) or []
 
-    safe_reviews = []
+    processed = []
     for r in reviews:
         sentiment = "neutral"
         try:
-            response = analyze_review_sentiments(r.get('review', ''))
-            sentiment = response.get('sentiment', 'neutral')
+            result = analyze_review_sentiments(r.get("review", ""))
+            sentiment = result.get("sentiment", "neutral")
         except Exception as e:
-            print(f"Sentiment analysis failed: {e}")
-        r['sentiment'] = sentiment
-        safe_reviews.append(r)
+            logger.error(f"Sentiment analysis failed: {e}")
 
-    return JsonResponse({"status": 200, "reviews": safe_reviews})
+        r["sentiment"] = sentiment
+        processed.append(r)
 
+    return JsonResponse({"status": 200, "reviews": processed})
 
 
 def add_review(request):
     if request.user.is_anonymous:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
+
     try:
         data = json.loads(request.body)
         response = post_review(data)
+
         if response is None:
             return JsonResponse({"status": 500, "message": "No response from backend"})
+
         return JsonResponse({"status": 200, "review": response})
+
     except Exception as e:
-        print(f"Add review error: {e}")
+        logger.error(f"Add review error: {e}")
         return JsonResponse({"status": 500, "message": str(e)})

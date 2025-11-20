@@ -1,5 +1,6 @@
 from .models import CarMake, CarModel
 
+
 def initiate():
     # Create a CarMake if not exists
     make, created = CarMake.objects.get_or_create(
