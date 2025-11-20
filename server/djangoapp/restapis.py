@@ -2,7 +2,6 @@
 import requests
 import os
 from dotenv import load_dotenv
-from .settings import backend_url
 
 load_dotenv()
 
@@ -43,7 +42,10 @@ def post_review(data_dict):
     request_url = backend_url + "/insert_review"
     try:
         response = requests.post(request_url, json=data_dict)
-        print(response.json())
+        if response.status_code != 200:
+            print(f"Backend returned {response.status_code}")
+            return None
         return response.json()
     except Exception as err:
         print(f"Network exception occurred: {err}")
+        return None

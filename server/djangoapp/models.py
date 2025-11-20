@@ -27,3 +27,15 @@ class CarModel(models.Model):
 
     def __str__(self):
         return f"{self.car_make.name} {self.name}"
+
+class Review(models.Model):
+    dealer_id = models.IntegerField()
+    name = models.CharField(max_length=100)
+    review = models.TextField()
+    car_make = models.CharField(max_length=50)
+    car_model = models.CharField(max_length=50)
+    car_year = models.IntegerField()
+    sentiment = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.name} - {self.dealer_id}"

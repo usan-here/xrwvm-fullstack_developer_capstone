@@ -122,34 +122,51 @@ def get_dealerships(request, state="All"):
 
 # Create `get_dealer_details` view
 def get_dealer_details(request, dealer_id):
-    if dealer_id:
-        endpoint = "/fetchDealer/" + str(dealer_id)
-        dealership = get_request(endpoint)
-        return JsonResponse({"status": 200, "dealer": dealership})
-    else:
+    if not dealer_id:
         return JsonResponse({"status": 400, "message": "Bad Request"})
+    
+    endpoint = f"/fetchDealer/{dealer_id}"
+    dealer_data = get_request(endpoint) or []
+    
+    # Make sure dealer_data is a list
+    if not isinstance(dealer_data, list):
+        dealer_data = [dealer_data] if dealer_data else []
+    
+    return JsonResponse({"status": 200, "dealer": dealer_data})
 
 
 # Create `get_dealer_reviews` view
 def get_dealer_reviews(request, dealer_id):
-    if dealer_id:
-        endpoint = "/fetchReviews/dealer/" + str(dealer_id)
-        reviews = get_request(endpoint)
-        for review_detail in reviews:
-            response = analyze_review_sentiments(review_detail['review'])
-            review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status": 200, "reviews": reviews})
-    else:
+    if not dealer_id:
         return JsonResponse({"status": 400, "message": "Bad Request"})
 
-# Create a `add_review` view to submit a review
-def add_review(request):
-    if not request.user.is_anonymous:
-        data = json.loads(request.body)
+    endpoint = f"/fetchReviews/dealer/{dealer_id}"
+    reviews = get_request(endpoint) or []
+
+    safe_reviews = []
+    for r in reviews:
+        sentiment = "neutral"
         try:
-            response = post_review(data)
-            return JsonResponse({"status": 200})
-        except:
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
-    else:
+            response = analyze_review_sentiments(r.get('review', ''))
+            sentiment = response.get('sentiment', 'neutral')
+        except Exception as e:
+            print(f"Sentiment analysis failed: {e}")
+        r['sentiment'] = sentiment
+        safe_reviews.append(r)
+
+    return JsonResponse({"status": 200, "reviews": safe_reviews})
+
+
+
+def add_review(request):
+    if request.user.is_anonymous:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
+    try:
+        data = json.loads(request.body)
+        response = post_review(data)
+        if response is None:
+            return JsonResponse({"status": 500, "message": "No response from backend"})
+        return JsonResponse({"status": 200, "review": response})
+    except Exception as e:
+        print(f"Add review error: {e}")
+        return JsonResponse({"status": 500, "message": str(e)})
